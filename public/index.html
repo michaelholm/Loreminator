@@ -77,6 +77,20 @@
               <button type="button" class="close" data-dismisser="alert">×</button>
               <strong>Oh snap!</strong> That word is already in the dictionary.
             </div>
+			<p><a id='dictionaryAddBtn' class="btn btn-primary btn-large">+ New Dictionary &raquo;</a></p>
+			
+			<div id="static" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+			  <div class="modal-body">
+			    <div class="controls">
+					<p>Enter a dictionary name</p>
+					<input id="dictionary-add" name="word-add" type="text" title="Dictionary" placeholder="Enter a dictionary name" />
+		        </div>
+			  </div>
+			  <div class="modal-footer">
+			    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+			    <button id='addDictionaryBtn' type="button" data-dismiss="modal" class="btn btn-primary">Create Dictionary</button>
+			  </div>
+			</div>
             <h1>Enter a word.</h1>
             <br />
 			          
@@ -136,7 +150,7 @@
     <script src="js/libs/log4javascript.min.js"></script>
     <script src="js/libs/underscore.js"></script>
     <script src="js/libs/backbone.js"></script>
-    <script src="js/libs/backbone.localStorage.js"></script>
+    <!-- // <script src="js/libs/backbone.localStorage.js"></script> -->
 
     <!-- <script type="text/javascript" src="js/main.js"></script> -->
 	<script src="js/utils.js"></script>

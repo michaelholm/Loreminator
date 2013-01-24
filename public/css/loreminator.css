@@ -50,6 +50,9 @@ div.hero-unit .alert-error { display: none; z-index: 200; float:left; width: 600
 	border: 1px solid;
 }
 
+p a#dictionaryAddBtn { float: right; }
+
+
 /*
 *
 *	styles

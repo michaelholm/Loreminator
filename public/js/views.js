@@ -7,6 +7,80 @@
 	// app.models = { };
 	// app.views = { };
 	
+	
+	window.Hero = Backbone.View.extend({
+
+		el: '.hero-unit',
+
+		events: {
+	      "click a#wordAddBtn": "addWord",
+		  "click a#dictionaryAddBtn": "showModal"
+	  },
+
+		showModal: function() {
+			$('.modal').modal('show');
+		},
+
+		addWord: function(e) {
+			// TODO: update references to LoreminatorRouter
+		  	e.preventDefault();
+			var self = this;
+			// get word from input field
+			addword = $("input#word-add").val();
+
+			// close the alert box
+			$(".alert .close").trigger('click');
+
+			if (addword.length > 0 && addword.length < 3 ) {
+				// message about short words?
+			} else if (addword.length >= 3) {
+
+				// check for dupe
+				if (Loreminator.Router.dictionary.where( { word: addword } ).length > 0 ) {
+					// alert dupe
+					$('.hero-unit .alert-error').fadeIn('slow');
+				} else {
+					// add to collection
+					var addWord = new Word({ word: addword });
+					// addWord.save();
+					addWord.save(null, {
+						success: function(model) {
+							console.log('Success! New word created and saved: ' + model.get('word'));
+						},
+						error: function (model, response) {    
+							console.log("Ouch! An error. The new word would not save: " + model.get('word'));
+						}
+					});
+					this.addWordLi(addWord);
+					$("input#word-add").val('');	
+				}
+
+			}
+
+			return this;
+		},
+
+		addWordLi: function (model) {
+			//The parameter passed is a reference to the model that was added
+			wordView = new RecentWordsListItem( { model: model } );
+			//console.log("Word List Child Count: " + this.recentwords.el.childElementCount);
+			if (Loreminator.Router.recentwords.el.childElementCount < 20) {
+				wordView.render();
+			} else {
+				var last = $(Loreminator.Router.recentwords.el.lastElementChild);
+				last.remove(); 	
+				wordView.render();
+			}
+		},
+
+		render: function (word) {
+		    item = new RecentWordsListItem(word);
+			appLog.info(item);
+			item.render().$el.prependTo('div#latestWords ul');
+		},
+
+	});
+	
 	/*
 	* 	the list of recently added words
 	*/
@@ -99,6 +173,36 @@
 	        return this;
 	    }
 	});
+	
+	window.ModalView = Backbone.View.extend({
+
+	        events: {
+	            'click .close': 'close',
+				'click button#addDictionaryBtn': 'addDictionary'
+	        },
+
+	        initialize: function() {
+	            this.template = _.template($('#modal-template').html());
+	        },
+	
+			addDictionary: function() {
+				alert('adding');
+			},
+
+	        render: function() {
+	            this.$el.html(this.template(this.model.toJSON()));
+	            return this;
+	        },
+
+	        show: function() {
+	            $(document.body).append(this.render().el);                
+	        },
+
+	        close: function() {
+	            this.remove();
+	        }
+
+	    });
 	   
 		
 

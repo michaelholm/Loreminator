@@ -8,8 +8,7 @@
 */
 window.Word = Backbone.Model.extend({
 	
-	urlRoot: "/words",
-	
+	url: "/words/:word",
 	
 	defaults: {
 		id: null,
@@ -23,18 +22,18 @@ window.Word = Backbone.Model.extend({
 		});
 	},
 	
-	url : function() {
-	    // Important! It's got to know where to send its REST calls. 
-	    // In this case, POST to '/donuts' and PUT to '/donuts/:id'
-	    return this.id ? '/api/words/' + this.id : '/'; 
-	},
-	
-	// Remove this word from *localStorage* and delete its view.
+	/*
+	*  TODO: remove reference to the word in the dictionary
+	*   which is better with mongodb?? save word with reference to 
+	*   it in dictionary (does this make sense even?),
+	*   or add the word to the dictionary, and the same word may 
+	*   appear as a unique item in one or more dictionaries
+	*/
+	// Remove this word and delete its view.
     clear: function() {
       this.destroy();
       this.view.remove();
     }
-	
 });
 
 
@@ -59,11 +58,14 @@ window.WordDictionary = Backbone.Collection.extend({
 		//this.bind("add", model.view.addWordLi);  
     },
 	
+	// localstorage save
 	// save: function() {
 	//     localStorage.setItem(this.word, JSON.stringify(this.data));
 	// }
 	
 });
+
+window.modalModel = new Backbone.Model();
 
 
 

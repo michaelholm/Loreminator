@@ -28,9 +28,11 @@ window.Router = Backbone.Router.extend({
 		this.recentwords.render();
 		this.dictionaryList.render();
 		console.log(this.dictionary.length);
+		
 	},
 
 	wordDetails: function (id) {
+		this.home();
         var word = new Word({_id: id});
         word.fetch({success: function(){
             $("#content").html(new WordView({model: word}).el);
@@ -103,98 +105,13 @@ window.Router = Backbone.Router.extend({
  
 });
 
-window.LoreminatorApp = Backbone.View.extend({
-	
-	el: '.hero-unit',
-	
-	//     initialize: function (options) {
-	// 	
-	// 	this.dictionary = new WordDictionary;
-	// 	this.dictionary.fetch();
-	// 	//this.wordslist = new RecentWordsList( { collection: this.dictionary, view: this } );
-	// 	this.recentwords = new RecentWordsList({ collection: this.dictionary });
-	// 	this.dictionaryList = new DictionaryList({ collection: this.dictionary });
-	// 	this.recentwords.render();
-	// 	this.dictionaryList.render();
-	// },
-	
-	events: {
-      "click a#wordAddBtn": "addWord"
-  },
 
-	addWord: function(e) {
-		// TODO: update references to LoreminatorRouter
-	  	e.preventDefault();
-		var self = this;
-		// get word from input field
-		addword = $("input#word-add").val();
-
-		// close the alert box
-		$(".alert .close").trigger('click');
-
-		if (addword.length > 0 && addword.length < 3 ) {
-			// message about short words?
-		} else if (addword.length >= 3) {
-			var incoming = $("input#word-add").val();
-
-			// check for dupe
-			var dupecheck = LoreminatorRouter.dictionary.where( { word: incoming } );
-			if (dupecheck.length > 0 ) {
-				// alert dupe
-				$('.hero-unit .alert-error').fadeIn('slow');
-			} else {
-				// add to collection
-				var addWord = new Word({ word: incoming });
-				addWord.save(null, {
-					success: function(model) {
-						console.log('new word saved: ' + model.word);
-					},
-					error: function(model) {
-						console.log("Ouch! New word would not save: " + model.word);
-					}
-				});
-				
-				// var addedWord = LoreminatorRouter.dictionary.create( 
-				// 	addWord, 
-				// 	{ wait: true, success: function(model,response) { console.log('Added to collection: ' + model.get('word')); } } 
-				// );
-				this.addWordLi(addWord);
-				$("input#word-add").val('');	
-			}
-
-		}
-
-		return this;
-	},
-	
-	addWordLi: function (model) {
-		//The parameter passed is a reference to the model that was added
-		wordView = new RecentWordsListItem( {model: model} );
-		console.log("Word List Child Count: " + this.recentwords.el.childElementCount);
-		if (this.recentwords.el.childElementCount < 20) {
-			wordView.render();
-		} else {
-			var last = $(this.recentwords.el.lastElementChild);
-			last.remove(); 	
-			wordView.render();
-		}
-	},
-	  
-	render: function (word) {
-	    item = new RecentWordsListItem(word);
-		appLog.info(item);
-		item.render().$el.prependTo('div#latestWords ul');
-	},
-	
-	
-	
-
-});
 
 tpl.loadTemplates(['word-options', 'word-details', 'word-list-item', 'dictionary-list-item'], function () {
     // initialize app vars
-	window.LoreminatorView = new LoreminatorApp();
-	window.LoreminatorRouter = new Router();
+	window.Loreminator = {};
+	window.Loreminator.HeroView = new Hero();
+	window.Loreminator.Router = new Router();
 	// start backbone
 	Backbone.history.start();
 	
@@ -205,6 +122,7 @@ tpl.loadTemplates(['word-options', 'word-details', 'word-list-item', 'dictionary
 
 $(".alert .close").unbind();
 $(".alert .close").on('click', function(e) { $(this).parent('.alert-error').fadeOut('slow'); });
+
     
 
 

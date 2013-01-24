@@ -22,7 +22,7 @@ app.configure(function () {
  
 app.get('/words', word.findAll);
 app.get('/words/:id', word.findById);
-app.post('/words', word.addWord);
+app.post('/words/:word', word.addWord);
 app.put('/words/:id', word.updateWord);
 app.delete('/words/:id', word.deleteWord);
  
